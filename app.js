@@ -45,14 +45,16 @@ console.log(operators);
 function makeOperation (element) {
     const first = num1;
     if (!first &&  first !== 0) { num1 = +(display.textContent); 
-    
-        // display.textContent = "";
+
         state = false; 
 
     operation = element.target.textContent;
     console.log(num1,num2,operation);
 }
     else if ((first || first === 0) && operation === null  ) {
+        state = false;
+        operation = element.target.textContent;
+        storedValue = null;
 
     }
 
