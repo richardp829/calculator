@@ -5,14 +5,16 @@ let state = false;
 let storedValue = null;
 let storedOperation;
 const numbers = document.querySelectorAll(".number");
-const display = document.querySelector("#display");
+const display = document.querySelector("#displayText");
 const operators = document.querySelectorAll(".operator");
 const clear = document.querySelector('#clear');
 console.log(clear);
 
 function clearAll () {
     num1 = null; num2 = null; operation = null; state = false;
-    display.textContent = "";
+    display.textContent = "Calculator";
+    storedValue = null;
+
 }
 
 // OPERACIONES //
@@ -35,13 +37,15 @@ function operate (num1,num2,operator) {
 console.log(numbers);
 
 
-display.textContent = ""
+display.textContent = "Calculator"
 
 
 console.log(display);
 
 console.log(operators);
+
 // BOTONES DE OPERACIONES EN USO //
+
 function makeOperation (element) {
     const first = num1;
     if (!first &&  first !== 0) { num1 = +(display.textContent); 
@@ -79,8 +83,10 @@ operators.forEach( element => {
 
 
 function changeDisplay (element) {
+    if(display.textContent.length > 10 && state === true) {return}
+    else {
     if (state === false ) { state = true ; display.textContent = "" }
-    display.textContent += element.target.textContent;
+    display.textContent += element.target.textContent; }
 }
 
 numbers.forEach(element => {
@@ -94,8 +100,8 @@ const equal = document.querySelector("#equal");
 function equalTo () {
 
     
-
-    if(storedValue === null) {
+    if (!num1) {return}
+    else if(storedValue === null) {
         num2 = +(display.textContent)
         num1 = operate(num1,num2,operation)
         display.textContent = num1
