@@ -1,12 +1,27 @@
 let num1 = null,
     num2 = null,
     operation = null;
+let state = false;
+let storedValue = null;
+let storedOperation;
+const numbers = document.querySelectorAll(".number");
+const display = document.querySelector("#display");
+const operators = document.querySelectorAll(".operator");
+const clear = document.querySelector('#clear');
+console.log(clear);
 
+function clearAll () {
+    num1 = null; num2 = null; operation = null; state = false;
+    display.textContent = "";
+}
+
+// OPERACIONES //
 function add (num1,num2) { return num1 + num2 };
 function subtract (num1,num2) { return num1 - num2 };
 function multiply (num1,num2) { return num1 * num2 };
 function divide (num1,num2) { return num1 / num2 };
 
+// USAR OPERACIONES //
 function operate (num1,num2,operator) {
     if (operator === "+") {return add(num1,num2) }
     else if (operator === "-") {return subtract(num1,num2) }
@@ -17,57 +32,87 @@ function operate (num1,num2,operator) {
 
 
 
-console.log(operate(1,2,"+"));
-
-const display = document.querySelector("#display");
-console.log(display);
-display.textContent = "";
-
-const numbers = document.querySelectorAll('.number');
 console.log(numbers);
 
 
-numbers.forEach( element => element.addEventListener("click" , function () { updateDisplay(element.textContent) } ) )
+display.textContent = ""
 
-function updateDisplay(element) {
-   if(!num2) { display.textContent += element}
-   else return;
+
+console.log(display);
+
+console.log(operators);
+// BOTONES DE OPERACIONES EN USO //
+function makeOperation (element) {
+    const first = num1;
+    if (!first &&  first !== 0) { num1 = +(display.textContent); 
+    
+        // display.textContent = "";
+        state = false; 
+
+    operation = element.target.textContent;
+    console.log(num1,num2,operation);
+}
+    else if ((first || first === 0) && operation === null  ) {
+
+    }
+
+    else if ((first || first === 0 ) && operation) {
+        state = false; 
+      num2 = +(display.textContent)
+    num1 = operate(num1,num2,operation)
+        display.textContent = num1
+        num2 = null;
+        operation = element.target.textContent;
+        console.log(num1,num2,operation);
+}
 }
 
-const operators = document.querySelectorAll(".operator");
 
 
-function operations (operator) {
-    num1 = +(display.textContent);
-    operation = operator;
-    display.textContent = "";
-    console.log(num1,operation);
+
+operators.forEach( element => {
+    element.addEventListener("click" , makeOperation)
+} )
+
+
+
+function changeDisplay (element) {
+    if (state === false ) { state = true ; display.textContent = "" }
+    display.textContent += element.target.textContent;
 }
 
-operators.forEach(element => element.addEventListener('click' , function() { if(!num1) operations(element.textContent) 
-    else return;
-}))
+numbers.forEach(element => {
+    element.addEventListener('click' , changeDisplay);
+})
+
+clear.addEventListener('click' , clearAll);
 
 
 const equal = document.querySelector("#equal");
-
-
 function equalTo () {
-    if (!num2) {
-    num2 = +(display.textContent);
-    display.textContent = operate(num1,num2,operation)}
-    else return;
+
+    
+
+    if(storedValue === null) {
+        num2 = +(display.textContent)
+        num1 = operate(num1,num2,operation)
+        display.textContent = num1
+        storedValue = num2;
+        num2 = null;
+        console.log(storedValue);
+        storedOperation = operation;
+        operation = null;
+        state = false;
+    }
+    else {
+        num1 = operate(num1,storedValue,storedOperation)
+        display.textContent = num1
+        state = false;
+        operation = null;
+        // console.log(storedValue);
+    }
+
+
 }
 
 equal.addEventListener('click' , equalTo);
-
-const clear = document.querySelector("#clear");
-
-function clearAll () {
-    num1 = null;
-    num2 = null;
-    operation = null;
-    display.textContent = "";
-}
-
-clear.addEventListener('click' , clearAll);
